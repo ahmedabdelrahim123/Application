@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UseGuards, Request, Res } from '@nestjs/common';
-import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -13,12 +13,13 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() body: { email: string; password: string }) {
-    return this.authService.login(body.email, body.password);
+  async login(@Request() req) {
+    return this.authService.login(req.body.email, req.body.password);
   }
 
+  @UseGuards(JwtAuthGuard) //  Protect the route
   @Post('protected')
   async protectedRoute(@Request() req) {
-    return { message: 'This is a protected route', user: req.user };
+    return { message: 'This is a protected route' };
   }
 }

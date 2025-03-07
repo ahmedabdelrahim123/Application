@@ -23,17 +23,13 @@ export class AuthService {
 
   async login(email: string, password: string) {
     const user = await this.validateUser(email, password);
-     
-    const jwtSecret = crypto.randomBytes(32).toString('hex'); // Generate new secret dynamically
-
-    console.log("jwtSecret",jwtSecret);
+  
     const payload = { sub: user._id, email: user.email };
-    console.log("payload",payload);
-    const token = this.jwtService.sign(payload, { secret: jwtSecret });
-    console.log("token",token);
-    // Store the token securely in an HTTP-only cookie
-    // res.cookie('jwt', token, { httpOnly: true, secure: true, sameSite: 'strict' });
-
-    return { message: 'Login successful', token };
+    
+    // Use the fixed secret from JWTModule 
+    const token = this.jwtService.sign(payload);
+    
+  
+    return {access_token: token };
   }
 }
