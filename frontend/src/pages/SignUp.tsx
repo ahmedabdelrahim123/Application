@@ -37,10 +37,10 @@ const SignUp: React.FC = () => {
         email: data.email,
         password: data.password, 
       };  
-      const response = await axios.post("${API_BASE_URL}/auth/signup", formattedData);
+      const response = await axios.post(`${API_BASE_URL}/auth/signup`, formattedData);
   
       setSuccessMessage("Registration successful! Redirecting...");
-      setTimeout(() => navigate("/signin"), 2000);
+      setTimeout(() => navigate("/"), 2000);
     } catch (error: any) {
       if (error.response?.status === 400 && error.response?.data?.message === "Email already exists") {
         setErrorMessage("This email is already registered. Please use a different email.");
@@ -94,7 +94,7 @@ const SignUp: React.FC = () => {
         </form>
 
         <p className="text-center mt-3">
-          Have an account? <Link to="/signin" className="text-primary">Sign In</Link>
+          Have an account? <Link to="/" className="text-primary">Sign In</Link>
         </p>
       </div>
     </div>
