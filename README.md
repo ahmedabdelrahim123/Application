@@ -3,6 +3,10 @@
 ## Overview
 This API provides authentication functionality, including user registration, login, logout, and access to protected routes. The authentication is handled using JWT (JSON Web Token) stored in an HTTP-only cookie.
 ________________________________________
+
+## Video Demo 
+https://drive.google.com/file/d/1TyetLLJO5Q8a6t8jAT4v_vLZkUREUHC5/view?usp=sharing
+________________________________________
 ## Base URL
 http://localhost:3000/auth
 ________________________________________
