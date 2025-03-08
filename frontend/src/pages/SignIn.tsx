@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import Cookies from "js-cookie";
-
+import { API_BASE_URL } from "../config/config"; 
 type SignInFormData = { email: string; password: string };
 
 const SignIn: React.FC = () => {
@@ -18,15 +17,14 @@ const SignIn: React.FC = () => {
 
   const checkAuth = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/auth/protected", {
+      const response = await axios.get("${API_BASE_URL}/auth/protected", {
         withCredentials: true, // Send cookies
       });
-      console.log("Response Headers:", response.headers);
       if (response.data.message === "Authenticated") {
         return true;
       }
     } catch (error:any) {
-      console.error("Auth Check Failed:", error.response?.data?.message || "Unknown error");
+      console.error("Auth Check Failed");
     }
     return false;
   };
@@ -38,7 +36,7 @@ const SignIn: React.FC = () => {
         password: data.password,
       };
   
-      await axios.post("http://localhost:3000/auth/login", formattedData, {
+      await axios.post("${API_BASE_URL}/auth/login", formattedData, {
         withCredentials: true, // Ensures cookies are sent with requests
       });
   
@@ -65,7 +63,7 @@ const SignIn: React.FC = () => {
       <div className="card p-4 shadow-lg" style={{ width: "400px" }}>
         <h2 className="text-center mb-4">Welcome Back</h2>
         {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-        <form onSubmit={handleSubmit(onSubmit)}> {/* ✅ No TypeScript Error */}
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
             <label className="form-label">Email:</label>
             <input

@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-
+import { API_BASE_URL } from "../config/config"; 
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email format").required("Email is required"),
@@ -37,7 +37,7 @@ const SignUp: React.FC = () => {
         email: data.email,
         password: data.password, 
       };  
-      const response = await axios.post("http://localhost:3000/auth/signup", formattedData);
+      const response = await axios.post("${API_BASE_URL}/auth/signup", formattedData);
   
       setSuccessMessage("Registration successful! Redirecting...");
       setTimeout(() => navigate("/signin"), 2000);
