@@ -24,7 +24,6 @@ export class AuthController {
       maxAge: 24 * 60 * 60 * 1000, // 1 day expiration
       sameSite: 'strict', // Prevent CSRF attacks (use 'lax' if you have cross-domain requests)
     });
-    // console.log("Cookie Set:", res.getHeaders()["set-cookie"]);
     return res.json({ message: 'Login successful' }); // No need to return the token
   }
 

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config'; // ✅ Import ConfigModule
+import { ConfigModule, ConfigService } from '@nestjs/config'; // Import ConfigModule
 import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
@@ -9,14 +9,14 @@ import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), // ✅ Load environment variables
+    ConfigModule.forRoot(), //  Load environment variables
     UsersModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'), // ✅ Read from .env
+        secret: configService.get<string>('JWT_SECRET'), // Read from .env
         signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN', '60m') },
       }),
     }),

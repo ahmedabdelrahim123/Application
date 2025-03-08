@@ -38,7 +38,7 @@ const SignUp: React.FC = () => {
         password: data.password, 
       };  
       const response = await axios.post(`${API_BASE_URL}/auth/signup`, formattedData);
-  
+      setErrorMessage("");
       setSuccessMessage("Registration successful! Redirecting...");
       setTimeout(() => navigate("/"), 2000);
     } catch (error: any) {

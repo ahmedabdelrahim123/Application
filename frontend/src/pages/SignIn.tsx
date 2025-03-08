@@ -11,7 +11,7 @@ const SignIn: React.FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false); // ✅ Loading state
+  const [loading, setLoading] = useState(false); // Loading state
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -31,7 +31,7 @@ const SignIn: React.FC = () => {
 
   const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
     try {
-      setLoading(true); // ✅ Show loading state
+      setLoading(true); // Show loading state
       
       const formattedData = { email: data.email, password: data.password };
       await axios.post(`${API_BASE_URL}/auth/login`, formattedData, { withCredentials: true });
@@ -39,7 +39,7 @@ const SignIn: React.FC = () => {
       const isAuthenticated = await checkAuth();
       if (isAuthenticated) {
         setErrorMessage("Login successful! Redirecting...");
-        setTimeout(() => navigate("/app"), 2000); // ✅ 2-second delay before navigating
+        setTimeout(() => navigate("/app"), 2000); //  2-second delay before navigating
       } else {
         setErrorMessage("Authentication failed");
         setLoading(false);
