@@ -1,16 +1,21 @@
 import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   canActivate(context: ExecutionContext) {
-    return super.canActivate(context);
-  }
+    const request = context.switchToHttp().getRequest<Request>();
 
-  handleRequest(err, user, info) {
-    if (err || !user) {
-      throw new UnauthorizedException('Invalid or missing token');
+    const token = request.cookies?.token; // Get token from cookies
+
+    if (!token) {
+      throw new UnauthorizedException('No token found');
     }
-    return user;
+
+    // Manually attach token to headers before calling super
+    request.headers.authorization = `Bearer ${token}`;
+
+    return super.canActivate(context);
   }
 }

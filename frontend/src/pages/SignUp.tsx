@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 
 const schema = yup.object().shape({
@@ -17,23 +18,46 @@ const schema = yup.object().shape({
     .required("Password is required"),
 });
 
+type SignUpFormData = { email: string; name: string; password: string };
+
 const SignUp: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>({
     resolver: yupResolver(schema),
   });
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    navigate("/signin"); // Redirect to sign-in after signup
+  const onSubmit = async (data: SignUpFormData) => {
+    try {  
+      const formattedData = {
+        name: data.name,
+        email: data.email,
+        password: data.password, 
+      };  
+      const response = await axios.post("http://localhost:3000/auth/signup", formattedData);
+  
+      setSuccessMessage("Registration successful! Redirecting...");
+      setTimeout(() => navigate("/signin"), 2000);
+    } catch (error: any) {
+      if (error.response?.status === 400 && error.response?.data?.message === "Email already exists") {
+        setErrorMessage("This email is already registered. Please use a different email.");
+      } else {
+        setErrorMessage("Registration failed. Please try again.");
+      }
+    }
   };
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
       <div className="card p-4 shadow-lg" style={{ width: "400px" }}>
         <h2 className="text-center mb-4">Sign Up</h2>
+
+        {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+        {successMessage && <div className="alert alert-success">{successMessage}</div>}
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
             <label className="form-label">Email:</label>
@@ -53,7 +77,7 @@ const SignUp: React.FC = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 className={`form-control ${errors.password ? "is-invalid" : ""}`}
-                {...register("password", { required: "Password is required" })}
+                {...register("password")}
               />
               <span
                 className="input-group-text bg-white"
